@@ -1,5 +1,5 @@
-# Scene-Text-Classification
-Scene Text Classification using Convolutional Recurrent Network
+# Scene-Text-Recognition
+Scene Text Recognition using Convolutional Recurrent Network
 
 This repostory implements CRNN for Scene Text Classification. The original paper about CRNN can be found [here](http://arxiv.org/abs/1507.05717)
 
