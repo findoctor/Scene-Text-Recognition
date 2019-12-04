@@ -9,7 +9,7 @@ This repostory implements CRNN for Scene Text Classification. The original paper
 * lmdb
 
 # Preparation
-Prepare your dataset first, store them in lmdb file.
+Prepare your dataset first, store them in lmdb file, it gives much better I/O performance
 ```bash
 create_dataset.py
 ```
