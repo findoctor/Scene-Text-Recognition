@@ -18,6 +18,6 @@ create_dataset.py
 # Usage
 Simply run train.py to train the model
 
-#TODO
+# TODO
 * Evaluate and predict
 * Use larger dataset to train the model, like [syn90K](https://www.robots.ox.ac.uk/~vgg/data/text/)
