@@ -13,7 +13,7 @@ import utils.config as cfg
 from utils.convert import LabelConverter
 from model.CRNN import CRNN
 
-# Load dataset from lmdb file
+# First Load dataset from lmdb file.
 train_dataset = lmdbDataset(root=cfg.lmdb_train_path)
 assert train_dataset
 train_loader = torch.utils.data.DataLoader(
