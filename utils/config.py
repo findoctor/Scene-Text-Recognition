@@ -8,7 +8,7 @@ batch_size = 100
 n_epoch = 20
 n_hidden = 256   # lstm hidden state
 n_class = len(alphabet)
-lr = 0.002           # learning rate 
+lr = 1e-4           # learning rate 
 beta1= 0.5
 
 n_channel = 1   # c=1 in this dataset IIITK5

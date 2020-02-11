@@ -28,7 +28,7 @@ def init_weights(m):
     classname = m.__class__.__name__
     if classname.find('Conv') != -1:
         torch.nn.init.xavier_uniform(m.weight)
-        m.bias.data.fill_(0.01)
+        #m.bias.data.fill_(0.01)
     if classname.find('BatchNorm') != -1:
         m.weight.data.normal_(1.0, 0.02)
         m.bias.data.fill_(0)
@@ -50,7 +50,12 @@ images = Variable(images)
 # Train batch for n_epochs
 for epoch in range(cfg.n_epoch):  
     running_loss = 0.0
+    print("lr = "+ str(cfg.lr))
     for i, data in enumerate(train_loader, 0):
+        for p in crnn.parameters():
+            p.requires_grad = True
+        crnn.train()
+
         inputs, labels = data
         labels = [s[2:-1] for s in labels]
 
@@ -69,8 +74,7 @@ for epoch in range(cfg.n_epoch):
 
         # forward + backward + optimize
         outputs = crnn(images)
-        outputs.requires_grad_()
-        
+
         input_lengths = torch.full((cfg.batch_size,), outputs.shape[0] , dtype=torch.long)
         loss = criterion(outputs, targets, input_lengths, target_length)
         loss.backward()
@@ -79,9 +83,9 @@ for epoch in range(cfg.n_epoch):
         # print statistics
         running_loss += loss.item()
         # we have 2000 training data in one batch, 100 per batch
-        if i % 2 == 1:    # print every 5 mini-batches
+        if i % 5 == 4:    # print every 5 mini-batches
             print('[%d, %5d] loss: %.3f' %
-                  (epoch + 1, i + 1, running_loss / 2))
+                  (epoch + 1, i + 1, running_loss / 5))
             running_loss = 0.0
 
 print('Finished Training')
