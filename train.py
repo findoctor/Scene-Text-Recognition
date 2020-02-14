@@ -13,6 +13,17 @@ import utils.config as cfg
 from utils.convert import LabelConverter
 from model.CRNN import CRNN
 
+Resume_flag = False
+check_point_path = ''
+
+def resumeModel(crnn, optimizer):
+    checkpoint = torch.load(check_point_path)
+    model.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    epoch = checkpoint['epoch']
+    loss = checkpoint['loss']
+    #model.train()
+
 # First Load dataset from lmdb file.
 train_dataset = lmdbDataset(root=cfg.lmdb_train_path)
 assert train_dataset
@@ -48,7 +59,10 @@ images = Variable(images)
 # texts = Variable(texts)
 
 # Train batch for n_epochs
-for epoch in range(cfg.n_epoch):  
+for epoch in range(cfg.n_epoch):
+    # Resume the model
+    if Resume_flag:
+        resumeModel(crnn, optimizer)
     running_loss = 0.0
     print("lr = "+ str(cfg.lr))
     for i, data in enumerate(train_loader, 0):
@@ -87,5 +101,12 @@ for epoch in range(cfg.n_epoch):
             print('[%d, %5d] loss: %.3f' %
                   (epoch + 1, i + 1, running_loss / 5))
             running_loss = 0.0
+    # Save the model
+    torch.save({'epoch': epoch+1,\
+                'model_state_dict': crnn.state_dict(),\
+                'optimizer_state_dict': optimizer.state_dict(),\
+                'loss': loss,
+                }, os.path.join('checkpoints', '_epoch_{}.pth'.format(epoch+1)))
+    check_point_path = os.path.join('checkpoints', '_epoch_{}.pth'.format(epoch+1))
 
 print('Finished Training')
